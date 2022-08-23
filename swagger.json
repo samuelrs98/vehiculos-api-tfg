@@ -1,0 +1,678 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API REST de Vehículos\n",
+    "version": "1.0.0",
+    "title": "Vehículos REST API",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "samuelrodriguezsimon1998@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "vehiculo",
+      "description": "Vehículos pertenecientes a la Administración"
+    },{
+      "name": "auth",
+      "description": "Funciones de autorización"
+    }
+  ],
+  "paths": {
+    "/vehiculo": {
+      "post": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Añadir vehículo a la base de datos",
+        "description": "Esta operación sólo la pueden realizar los usuarios que hayan iniciado sesión.",
+        "operationId": "vehiculoCreate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "path",
+            "description": "El tipo del vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "marca",
+            "in": "path",
+            "description": "La marca del vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "modelo",
+            "in": "path",
+            "description": "El modelo del vehículo a añadir.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "matricula",
+            "in": "path",
+            "description": "La matrícula del vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "anio_alta",
+            "in": "path",
+            "description": "El año de alta del vehículo a añadir.",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "uso",
+            "in": "path",
+            "description": "El uso del vehículo a añadir.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "institucion",
+            "in": "path",
+            "description": "La institución a la que pertenece el vehículo a añadir.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "regimen",
+            "in": "path",
+            "description": "Indica si el vehículo a añadir está alquilado, prestado o en propiedad.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "estado",
+            "in": "path",
+            "description": "Indica si el vehículo a añadir está operativo o no.",
+            "required": true,
+            "type": "boolean"
+          },
+          {
+            "name": "anio_baja",
+            "in": "path",
+            "description": "El año de baja del vehículo a añadir.",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "400": {
+            "description": "Error al crear."
+          },
+          "401": {
+            "description": "Token inválido."
+          },
+          "403": {
+            "description": "Acceso prohibido (es necesario introducir token en la petición)."
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Obtiene un vehículo cualquiera (endpoint simple para probar)",
+        "operationId": "vehiculoFindOne",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "404": {
+            "description": "Vehículo no encontrado"
+          }
+        }
+      }
+    },
+    "/matricula/{matricula}": {      
+      "get": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Obtener vehículo por matrícula",
+        "operationId": "vehiculoFindByMatricula",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "matricula",
+            "in": "path",
+            "description": "La matrícula del vehículo. Use 1234 ABC para pruebas.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "404": {
+            "description": "Vehículo no encontrado"
+          }
+        }
+      }
+    },
+    "/todos": {
+      "get": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Obtener lista de vehículos",
+        "operationId": "vehiculoFindAll",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "404": {
+            "description": "Lista de vehículos no encontrada o vacía."
+          }
+        }
+      }
+    },
+    "/operativos": {
+      "get": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Obtener lista de vehículos operativos (estado = true)",
+        "operationId": "vehiculoFindOperativos",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "404": {
+            "description": "Lista de vehículos no encontrada o vacía."
+          }
+        }
+      }
+    },
+    "/tipo/{tipo}": {
+      "get": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Obtener vehículos por tipo.",
+        "operationId": "vehiculoFindByTipo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "path",
+            "description": "El tipo de vehículo a recuperar. Use Turismo para pruebas.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta.",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "404": {
+            "description": "Tipo no encontrado."
+          }
+        }
+      }
+    },
+    "/marca/{marca}": {
+      "get": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Obtener vehículos por marca.",
+        "operationId": "vehiculoFindByMarca",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "marca",
+            "in": "path",
+            "description": "La marca de los vehículos a recuperar. Use Ford para pruebas.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "404": {
+            "description": "Marca no encontrada"
+          }
+        }
+      }
+    },
+    "/anio_alta/{anio_alta}": {
+      "get": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Obtener vehículos por año de alta.",
+        "operationId": "vehiculoFindByAnioAlta",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "anio_alta",
+            "in": "path",
+            "description": "El año de alta de los vehículos a recuperar. Use 2014 para pruebas.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "404": {
+            "description": "Marca no encontrada"
+          }
+        }
+      }
+    },
+    "/anio/{anio}": {
+      "get": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Obtener vehículos que hayan estado operativos cierto año.",
+        "operationId": "vehiculoFindByAnioAlta",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "anio",
+            "in": "path",
+            "description": "El año de los vehículos a recuperar. Use 2017 para pruebas.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "404": {
+            "description": "Marca no encontrada"
+          }
+        }
+      }
+    },
+    "/vehiculo/{matricula}": {
+      "put": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Actualizar vehículo",
+        "description": "Esta operación sólo la pueden realizar los usuarios que hayan iniciado sesión.",
+        "operationId": "vehiculoUpdate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          
+          {
+            "name": "tipo",
+            "in": "path",
+            "description": "El tipo del vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "marca",
+            "in": "path",
+            "description": "La marca del vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "modelo",
+            "in": "path",
+            "description": "El modelo del vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "matricula",
+            "in": "path",
+            "description": "La matrícula del vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "anio_alta",
+            "in": "path",
+            "description": "El año de alta del vehículo a añadir.",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "uso",
+            "in": "path",
+            "description": "El uso del vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "institucion",
+            "in": "path",
+            "description": "La institución a la que pertenece el vehículo a añadir.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "regimen",
+            "in": "path",
+            "description": "Indica si el vehículo a añadir está alquilado, prestado o en propiedad.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "estado",
+            "in": "path",
+            "description": "Indica si el vehículo a añadir está operativo o no.",
+            "required": true,
+            "type": "boolean"
+          },
+          {
+            "name": "anio_baja",
+            "in": "path",
+            "description": "El año de baja del vehículo a añadir.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "401": {
+            "description": "Token inválido."
+          },
+          "403": {
+            "description": "Acceso prohibido (es necesario introducir token en la petición)."
+          },
+          "404": {
+            "description": "Vehículo no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "vehiculo"
+        ],
+        "summary": "Eliminar vehículo",
+        "description": "Esta operación sólo la pueden realizar los usuarios que hayan iniciado sesión.",
+        "operationId": "vehiculoDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "matricula",
+            "in": "path",
+            "description": "La matrícula del vehículo a eliminar. Use 1234 ABC para pruebas.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Operación correcta",
+            "schema": {
+              "$ref": "#/definitions/Vehiculo"
+            }
+          },
+          "400": {
+            "description": "Error al eliminar."
+          },
+          "401": {
+            "description": "Token inválido."
+          },
+          "403": {
+            "description": "Acceso prohibido (es necesario introducir token en la petición)."
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Registrar a usuario en la base de datos",
+        "operationId": "signup",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in":"body",
+            "name": "login",
+            "description": "Usuario.",
+            "required": true,
+            "schema": {
+              "type":"object",
+              "required": ["username", "password"],
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta. Se devuelve un token de acceso a la API."
+          },
+          "400": {
+            "description": "Error al registrar."
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Iniciar sesión de un usuario ya registrado.",
+        "operationId": "login",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in":"body",
+            "name": "login",
+            "description": "Usuario.",
+            "required": true,
+            "schema": {
+              "type":"object",
+              "required": ["username", "password"],
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación correcta. Se devuelve un token de acceso a la API."
+          },
+          "401": {
+            "description": "Nombre de usuario y/o contraseña inválidos."
+          },
+          "404": {
+            "description": "Usuario no encontrado."
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Operación GET/PUT correcta."
+    },
+    "201": {
+      "description": "Operación POST correcta."
+    },
+    "204": {
+      "description": "Operación DELETE correcta."
+    },
+    "400": {
+      "description": "Contenido para acceder al endpoint inválido."
+    },
+    "401": {
+      "description": "Nombre de usuario/contraseña/token inválido."
+    },
+    "403": {
+      "description": "Acceso prohibido (es necesario introducir token en la petición)."
+    },
+    "404": {
+      "description": "Información no encontrada."
+    }
+  },
+  "definitions": {
+    "User": {
+      "type":"object",
+      "required": [
+        "username",
+        "password"
+      ],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Vehiculo": {
+      "type": "object",
+      "required": [
+        "tipo",
+        "marca",
+        "matricula",
+        "anio_alta",
+        "estado"
+      ],
+      "properties": {
+        "tipo": {
+          "type": "string"
+        },
+        "marca": {
+          "type": "string"
+        },
+        "modelo": {
+          "type": "string"
+        },
+        "matricula": {
+          "type": "string"
+        },
+        "anio_alta": {
+          "type": "number"
+        },
+        "uso": {
+          "type": "string"
+        },
+        "institucion": {
+          "type": "string"
+        },
+        "regimen": {
+          "type": "string"
+        },
+        "estado": {
+          "type": "boolean"
+        },
+        "anio_baja": {
+          "type": "number"
+        }
+      },
+      "xml": {
+        "name": "Vehiculo"
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Más información sobre Swagger",
+    "url": "http://swagger.io"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api"
+}
